@@ -12,6 +12,12 @@ from pipeline_stable_diffusion_xl_instantid_full import StableDiffusionXLInstant
 
 from controlnet_aux import MidasDetector
 
+import psutil
+
+import os
+
+process = psutil.Process(os.getpid())
+
 def convert_from_image_to_cv2(img: Image) -> np.ndarray:
     return cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
 
