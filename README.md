@@ -1,7 +1,7 @@
 ## ANKUR CHANGES
 Implementation & Code run is the below instructions from the InstantID.
 
-after installation - run 'python3 infer_full.py'
+after installation - run `python3 infer_full.py`
 
 there is a variable in infer_full named - `is_improved_on` which controls the original vs change output
 
