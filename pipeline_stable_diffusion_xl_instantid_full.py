@@ -51,6 +51,7 @@ from ip_adapter.attention_processor import region_control
 
 logger = logging.get_logger(__name__)  # pylint: disable=invalid-name
 
+import time
 
 EXAMPLE_DOC_STRING = """
     Examples:
@@ -249,6 +250,8 @@ class LongPromptWeight(object):
                 ,prompt = "a (red:1.5) cat"*70
             )
         """
+
+        a = time.time()
         
         texts_and_weights = self.parse_prompt_attention(prompt)
         text_tokens, text_weights = [], []
@@ -266,6 +269,13 @@ class LongPromptWeight(object):
 
             # append the weight back to the weight holder: text_weights
             text_weights = [*text_weights, *chunk_weights]
+        
+        b = time.time()
+
+        duration = (b - a)
+
+        print(f'Function execution time: {duration:.4f} seconds')
+
         return text_tokens, text_weights
 
     def group_tokens_and_weights(self, token_ids: list, weights: list, pad_last_block=False):
@@ -1126,8 +1136,8 @@ class StableDiffusionXLInstantIDPipeline(StableDiffusionXLControlNetPipeline):
                         return_dict=False,
                     )
 
-                    print('[Memory Inspection : 1]Memory Allocated: %0.2fMB, Memory Reserved: %0.2fMB \n'\
-                            %(torch.cuda.memory_allocated()/1e6, torch.cuda.memory_reserved()/1e6))
+                    # print('[Memory Inspection : 1]Memory Allocated: %0.2fMB, Memory Reserved: %0.2fMB \n'\
+                    #         %(torch.cuda.memory_allocated()/1e6, torch.cuda.memory_reserved()/1e6))
 
 
                     # controlnet mask
@@ -1158,8 +1168,8 @@ class StableDiffusionXLInstantIDPipeline(StableDiffusionXLControlNetPipeline):
                     return_dict=False,
                 )[0]
 
-                print('[Memory Inspection : 2]Memory Allocated: %0.2fMB, Memory Reserved: %0.2fMB \n'\
-                            %(torch.cuda.memory_allocated()/1e6, torch.cuda.memory_reserved()/1e6))
+                # print('[Memory Inspection : 2]Memory Allocated: %0.2fMB, Memory Reserved: %0.2fMB \n'\
+                #             %(torch.cuda.memory_allocated()/1e6, torch.cuda.memory_reserved()/1e6))
 
                 # perform guidance
                 if self.do_classifier_free_guidance:

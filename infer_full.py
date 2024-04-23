@@ -16,6 +16,18 @@ import psutil
 
 import os
 
+from transformers import pipeline
+
+from util import *
+
+from prompt import *
+
+import time
+
+
+## Parameter defined by me to compare original output vs my improvement.
+is_improved_on = True
+
 process = psutil.Process(os.getpid())
 
 def convert_from_image_to_cv2(img: Image) -> np.ndarray:
@@ -46,6 +58,29 @@ def resize_img(input_image, max_side=1280, min_side=1024, size=None,
 
 
 if __name__ == "__main__":
+
+    a = time.time()
+
+    prompt = long_prompt
+    n_prompt = n_prompt
+
+    if is_improved_on:
+        # is_pos_prompt_toxic = is_toxic_prompt(prompt)
+        # is_neg_prompt_toxic = is_toxic_prompt(n_prompt)
+
+        # if is_pos_prompt_toxic or is_neg_prompt_toxic:
+        #     print("Your prompt is toxic, unable to generate photos")
+        #     exit()
+
+        # is_pos_phising_prompt = is_phising_prompt(prompt)
+        # is_neg_phising_prompt = is_phising_prompt(n_prompt)
+
+        # if is_pos_phising_prompt or is_neg_phising_prompt:
+        #     print("Your prompt is phising or contains harmful information.")
+        #     exit()
+
+        prompt = keyword_extractor(prompt)
+        n_prompt = keyword_extractor(n_prompt)
 
     # Load face encoder
     app = FaceAnalysis(name='antelopev2', root='./', providers=['CUDAExecutionProvider', 'CPUExecutionProvider'])
@@ -78,10 +113,11 @@ if __name__ == "__main__":
     pipe.load_ip_adapter_instantid(face_adapter)
 
     # Infer setting
-    prompt = "analog film photo of a man. faded film, desaturated, 35mm photo, grainy, vignette, vintage, Kodachrome, Lomography, stained, highly detailed, found footage, masterpiece, best quality"
-    n_prompt = "(lowres, low quality, worst quality:1.2), (text:1.2), watermark, painting, drawing, illustration, glitch, deformed, mutated, cross-eyed, ugly, disfigured (lowres, low quality, worst quality:1.2), (text:1.2), watermark, painting, drawing, illustration, glitch,deformed, mutated, cross-eyed, ugly, disfigured"
+    
 
-    face_image = load_image("./examples/yann-lecun_resize.jpg")
+    
+
+    face_image = load_image("./examples/sam_resize.png")
     face_image = resize_img(face_image)
 
     face_info = app.get(cv2.cvtColor(np.array(face_image), cv2.COLOR_RGB2BGR))
@@ -122,4 +158,8 @@ if __name__ == "__main__":
         guidance_scale=5,
     ).images[0]
 
-    image.save('result.jpg')
+    image.save('long_prompt__keword_extractor_result.jpg')
+
+    b = time.time()
+
+    print(f'Time taken by : {b-a}')
