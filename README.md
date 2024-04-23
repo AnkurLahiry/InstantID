@@ -1,3 +1,18 @@
+## ANKUR CHANGES
+Implementation & Code run is the below instructions from the InstantID.
+
+after installation - run 'python3 infer_full.py'
+
+there is a variable in infer_full named - `is_improved_on` which controls the original vs change output
+
+
+`util.py` contains most of the changes. This is completely new file written by me.
+
+`bertSummarizer.py` is a summarized written by me. 
+
+`prompt.py` is comprised of the prompts for the experiment. 
+
+*******************
 <div align="center">
 <h1>InstantID: Zero-shot Identity-Preserving Generation in Seconds</h1>
 
