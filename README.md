@@ -1,7 +1,27 @@
 ## ANKUR CHANGES
-Implementation & Code run is the below instructions from the InstantID.
 
-after installation - run `python3 infer_full.py`
+TLDR; 
+
+InstantID is a model developed for zero-shot identity-preserving generation, which can generate high-fidelity images with a single reference image in any style. 
+It uses a novel "IdentityNet" that combines facial and landmark images with textual prompts to guide image generation, ensuring identity preservation and high fidelity.
+
+The problem I found out in the implementation of the InstantID is that they didn't care anything about the prompt. 
+
+For example, the prompt may be 
+
+1) toxic: different abusive words can be injected into what users may not want to do. This should be prevented.
+2) phishing: For example, there may be any false prompt text that may be harmful. For example: An image can be generated with false information about Coca-Cola company, which is harmful to that company. That should be prevented.
+3) Long prompt: A document can be uploaded like 10K words, can we improve it?
+
+Proposed implemented method:
+
+1) Implemented Detoxify to classify whether this is toxic or not. Analyze the result from output. 
+2) Implement BertForSequenceClassification to classify is phishing or not
+3) Implement t5_summary_generation, bert_summary, and word_tokenize to extract the summary from a long prompt and compare the runtime. 
+
+Implementation & Code run are the below instructions from the InstantID.
+
+after installation, as they describe then - run `python3 infer_full.py`
 
 there is a variable in infer_full named - `is_improved_on` which controls the original vs change output
 
